@@ -5,7 +5,7 @@
   <script type="text/javascript">
     google.charts.load('current', { 'packages': ['corechart', 'treemap'] });
 
-    var confirmedCountQuery = 'https://docs.google.com/spreadsheets/d/1qLGBnsYMfajvRJQm0TADdnidm1wrJmNw2lCyQyGsK8M/gviz/tq?sheet=percentIncrease&headers=1&range=F:J&tq='
+    var confirmedCountQuery = 'https://docs.google.com/spreadsheets/d/1qLGBnsYMfajvRJQm0TADdnidm1wrJmNw2lCyQyGsK8M/gviz/tq?sheet=percentIncrease&headers=1&range=F:N&tq='
     var dailyIncreaseQuery = 'https://docs.google.com/spreadsheets/d/1qLGBnsYMfajvRJQm0TADdnidm1wrJmNw2lCyQyGsK8M/gviz/tq?sheet=percentIncrease&headers=1&range=A:D&tq='
     var percentPopulationQuery = 'https://docs.google.com/spreadsheets/d/1qLGBnsYMfajvRJQm0TADdnidm1wrJmNw2lCyQyGsK8M/gviz/tq?sheet=populationInfected&headers=1&range=A:B&tq='
     var allStatesQuery = 'https://docs.google.com/spreadsheets/d/1qLGBnsYMfajvRJQm0TADdnidm1wrJmNw2lCyQyGsK8M/gviz/tq?sheet=allStates&headers=1&range=A:C&tq='
@@ -25,7 +25,7 @@
       var data = response.getDataTable();
       var options = {
         'title': 'Confirmed COVID-19 Cases - Select States',
-        'width': 1200,
+        'width': 1400,
         'height': 600
       };
       var chart = new google.visualization.LineChart(document.getElementById('confirmed_cases'));
@@ -33,23 +33,23 @@
     }
     function drawGID_percentIncrease(googleSheetsQuery) {
       var query = new google.visualization.Query(googleSheetsQuery);
-      query.send(handleQueryResponseTwo);
+      query.send(handleQueryResponse_percentIncrease);
     }
 
-    function handleQueryResponseTwo(response2) {
-      if (response2.isError()) {
-        alert('Error in query: ' + response2.getMessage() + ' ' + response2.getDetailedMessage());
+    function handleQueryResponse_percentIncrease(response) {
+      if (response.isError()) {
+        alert('Error in query: ' + response.getMessage() + ' ' + response.getDetailedMessage());
         return;
       }
 
-      var data2 = response2.getDataTable();
+      var data = response.getDataTable();
       var options = {
         'title': 'Daily % Change in COVID-19 Cases',
-        'width': 1200,
+        'width': 1400,
         'height': 600
       };
-      var chart2 = new google.visualization.AreaChart(document.getElementById('percent_increase'));
-      chart2.draw(data2, options);
+      var chart = new google.visualization.AreaChart(document.getElementById('percent_increase'));
+      chart.draw(data, options);
     }
 
     function drawGID_populationPercent(googleSheetsQuery) {
@@ -75,7 +75,7 @@
 
       var options = {
         title: "% of State Population Infected as of " + latestData,
-        width: 1200,
+        width: 1400,
         height: 600,
         bar: { groupWidth: "95%" },
         legend: { position: "none" },
