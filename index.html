@@ -1,102 +1,147 @@
 <html>
-  <head>
-    <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
-    <script type="text/javascript">
-      google.charts.load('current', {'packages':['corechart']});
 
-var confirmedCountQuery = 'https://docs.google.com/spreadsheets/d/1qLGBnsYMfajvRJQm0TADdnidm1wrJmNw2lCyQyGsK8M/gviz/tq?sheet=percentIncrease&headers=1&range=F:J&tq='
-var dailyIncreaseQuery = 'https://docs.google.com/spreadsheets/d/1qLGBnsYMfajvRJQm0TADdnidm1wrJmNw2lCyQyGsK8M/gviz/tq?sheet=percentIncrease&headers=1&range=A:D&tq='
-var percentPopulationQuery = 'https://docs.google.com/spreadsheets/d/1qLGBnsYMfajvRJQm0TADdnidm1wrJmNw2lCyQyGsK8M/gviz/tq?sheet=populationInfected&headers=1&range=A:B&tq='
-var latestData = "3/25/2020";
+<head>
+  <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+  <script type="text/javascript">
+    google.charts.load('current', { 'packages': ['corechart', 'treemap'] });
 
-function drawGID_confirmedCases(googleSheetsQuery) {
-    var query = new google.visualization.Query(googleSheetsQuery);
-    query.send(handleQueryResponse_dailyConfirmedCount);
+    var confirmedCountQuery = 'https://docs.google.com/spreadsheets/d/1qLGBnsYMfajvRJQm0TADdnidm1wrJmNw2lCyQyGsK8M/gviz/tq?sheet=percentIncrease&headers=1&range=F:J&tq='
+    var dailyIncreaseQuery = 'https://docs.google.com/spreadsheets/d/1qLGBnsYMfajvRJQm0TADdnidm1wrJmNw2lCyQyGsK8M/gviz/tq?sheet=percentIncrease&headers=1&range=A:D&tq='
+    var percentPopulationQuery = 'https://docs.google.com/spreadsheets/d/1qLGBnsYMfajvRJQm0TADdnidm1wrJmNw2lCyQyGsK8M/gviz/tq?sheet=populationInfected&headers=1&range=A:B&tq='
+    var allStatesQuery = 'https://docs.google.com/spreadsheets/d/1qLGBnsYMfajvRJQm0TADdnidm1wrJmNw2lCyQyGsK8M/gviz/tq?sheet=allStates&headers=1&range=A:C&tq='
+    var latestData = "3/25/2020";
+
+    function drawGID_confirmedCases(googleSheetsQuery) {
+      var query = new google.visualization.Query(googleSheetsQuery);
+      query.send(handleQueryResponse_dailyConfirmedCount);
     }
 
-function handleQueryResponse_dailyConfirmedCount(response) {
+    function handleQueryResponse_dailyConfirmedCount(response) {
       if (response.isError()) {
         alert('Error in query: ' + response.getMessage() + ' ' + response.getDetailedMessage());
         return;
       }
 
       var data = response.getDataTable();
-      var options = {'title':'Confirmed COVID-19 Cases - NY, VA, NC, WA',
-                       'width':1200,
-                       'height':600};
+      var options = {
+        'title': 'Confirmed COVID-19 Cases - NY, VA, NC, WA',
+        'width': 1200,
+        'height': 600
+      };
       var chart = new google.visualization.LineChart(document.getElementById('confirmed_cases'));
       chart.draw(data, options);
-}
-function drawGID_percentIncrease(googleSheetsQuery) {
-    var query = new google.visualization.Query(googleSheetsQuery);
-    query.send(handleQueryResponseTwo);
+    }
+    function drawGID_percentIncrease(googleSheetsQuery) {
+      var query = new google.visualization.Query(googleSheetsQuery);
+      query.send(handleQueryResponseTwo);
     }
 
-function handleQueryResponseTwo(response2) {
+    function handleQueryResponseTwo(response2) {
       if (response2.isError()) {
         alert('Error in query: ' + response2.getMessage() + ' ' + response2.getDetailedMessage());
         return;
       }
 
       var data2 = response2.getDataTable();
-      var options = {'title':'Daily % Change in COVID-19 Cases',
-                       'width':1200,
-                       'height':600};
+      var options = {
+        'title': 'Daily % Change in COVID-19 Cases',
+        'width': 1200,
+        'height': 600
+      };
       var chart2 = new google.visualization.AreaChart(document.getElementById('percent_increase'));
       chart2.draw(data2, options);
-}
-
-function drawGID_populationPercent(googleSheetsQuery) {
-  var query = new google.visualization.Query(googleSheetsQuery);
-    query.send(handleQueryResponse_populationPercent);
     }
-    
-function handleQueryResponse_populationPercent(response) {
+
+    function drawGID_populationPercent(googleSheetsQuery) {
+      var query = new google.visualization.Query(googleSheetsQuery);
+      query.send(handleQueryResponse_populationPercent);
+    }
+
+    function handleQueryResponse_populationPercent(response) {
       if (response.isError()) {
         alert('Error in query: ' + response.getMessage() + ' ' + response.getDetailedMessage());
         return;
       }
 
       var data = response.getDataTable();
-      console.log(data);
       var view = new google.visualization.DataView(data);
       view.setColumns([0, 1,
-                       { calc: "stringify",
-                         sourceColumn: 1,
-                         type: "string",
-                         role: "annotation" }]);
+        {
+          calc: "stringify",
+          sourceColumn: 1,
+          type: "string",
+          role: "annotation"
+        }]);
 
       var options = {
         title: "% of State Population Infected as of " + latestData,
         width: 1200,
         height: 600,
-        bar: {groupWidth: "95%"},
+        bar: { groupWidth: "95%" },
         legend: { position: "none" },
       };
       var chart = new google.visualization.ColumnChart(document.getElementById("population_percent"));
       chart.draw(view, options);
-}
+    }
 
+    function drawGID_allStates(googleSheetsQuery) {
+      var query = new google.visualization.Query(googleSheetsQuery);
+      query.send(handleQueryResponse_allStates);
+    }
 
-google.charts.setOnLoadCallback(function() { drawGID_confirmedCases(confirmedCountQuery) });
-google.charts.setOnLoadCallback(function() { drawGID_percentIncrease(dailyIncreaseQuery) });
-google.charts.setOnLoadCallback(function() { drawGID_populationPercent(percentPopulationQuery) });
+    function handleQueryResponse_allStates(response) {
+      if (response.isError()) {
+        alert('Error in query: ' + response.getMessage() + ' ' + response.getDetailedMessage());
+        return;
+      }
 
-//google.charts.setOnLoadCallback(drawPieChart);
+      var data = response.getDataTable();
+      var options = {
+        title: "Total Cases per State as of " + latestData,
+        width: 1200,
+        height: 600,
+        minColor: '#0d0',
+        midColor: '#ddd',
+        maxColor: '#f00',
+        headerHeight: 15,
+        fontColor: 'black',
+        showScale: true,
+        generateTooltip: showFullTooltip
+      };
+      tree = new google.visualization.TreeMap(document.getElementById('states_tree'));
 
-    </script>
-  </head>
+      tree.draw(data, options);
 
-  <body>
-    <h2>COVID-19 in the United States</h2>
-    <p>
-      <strong>Description:</strong> Simple project to analyze COVID data in the US and beat quarantine boredome. :)
-      <br><strong>Data Source:</strong> <a href="https://github.com/CSSEGISandData"target="_blank">Johns Hopkins CSSE</a>
-      <br><strong>Tools:</strong> Coded using <a href="https://developers.google.com/chart"target="_blank">Google Charts</a>, data stored in Google Sheets
-  <br><strong>Last Updated:</strong> 3/26/2020
-</p>
-<div id="confirmed_cases"></div>
-<div id="percent_increase"></div>
-<div id="population_percent"></div>
-  </body>
+      function showFullTooltip(row, size, value) {
+        return '<div style="background:#fd9; padding:10px; border-style:solid">' +
+          '<span style="font-family:Arial"><b>' + data.getValue(row, 0) +
+          '</b>, ' + data.getValue(row, 1) + ', ' + data.getValue(row, 2)
+        'Datatable row: ' + row + '<br>' +
+          data.getColumnLabel(2) +
+          ' (total value of this cell and its children): ' + size + '<br></div>';
+      }
+    }
+
+    google.charts.setOnLoadCallback(function () { drawGID_confirmedCases(confirmedCountQuery) });
+    google.charts.setOnLoadCallback(function () { drawGID_percentIncrease(dailyIncreaseQuery) });
+    google.charts.setOnLoadCallback(function () { drawGID_populationPercent(percentPopulationQuery) });
+    google.charts.setOnLoadCallback(function () { drawGID_allStates(allStatesQuery) });
+  </script>
+</head>
+
+<body>
+  <h2>COVID-19 in the United States</h2>
+  <p>
+    <strong>Description:</strong> Simple project to analyze COVID data in the US and learn a new tool.
+    <br><strong>Data Source:</strong> <a href="https://github.com/CSSEGISandData" target="_blank">Johns Hopkins CSSE</a>
+    <br><strong>Tools:</strong> Coded using <a href="https://developers.google.com/chart" target="_blank">Google
+      Charts</a>, data stored in Google Sheets
+    <br><strong>Last Updated:</strong> 3/26/2020
+  </p>
+  <div id="confirmed_cases"></div>
+  <div id="percent_increase"></div>
+  <div id="population_percent"></div>
+  <div id="states_tree"></div>
+</body>
+
 </html>
