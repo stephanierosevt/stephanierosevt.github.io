@@ -17,7 +17,7 @@
       var wrapper = new google.visualization.ChartWrapper({
         chartType: 'LineChart',
         dataSourceUrl: confirmedCountQuery,
-        //query: 'SELECT A,D WHERE D > 100 ORDER BY D',
+        //query: 'SELECT D,E,F ORDER BY D',
         options: { 'title': 'Confirmed COVID-19 Cases - Select States', 'width': 1400, 'height': 600, hAxis: { format: 'MMM d, y' }, vAxis: { format: 'decimal' } },
         containerId: 'confirmed_cases'
       });
@@ -97,7 +97,7 @@
         width: 1200,
         height: 600,
         minColor: '#0d0',
-        midColor: '#ddd',
+        midColor: 'yellow',
         maxColor: '#f00',
         headerHeight: 15,
         fontColor: 'black',
