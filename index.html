@@ -3,12 +3,13 @@
 <head>
   <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
   <script type="text/javascript">
-    google.charts.load('current', { 'packages': ['corechart', 'treemap'] });
+    google.charts.load('current', { 'packages': ['corechart', 'treemap', 'line'] });
 
-    var confirmedCountQuery = 'https://docs.google.com/spreadsheets/d/1qLGBnsYMfajvRJQm0TADdnidm1wrJmNw2lCyQyGsK8M/gviz/tq?sheet=percentIncrease&headers=1&range=F:N&tq='
+    var confirmedCountQuery = 'https://docs.google.com/spreadsheets/d/1qLGBnsYMfajvRJQm0TADdnidm1wrJmNw2lCyQyGsK8M/gviz/tq?sheet=dailyCounts&headers=1&range=J:R&tq='
     var dailyIncreaseQuery = 'https://docs.google.com/spreadsheets/d/1qLGBnsYMfajvRJQm0TADdnidm1wrJmNw2lCyQyGsK8M/gviz/tq?sheet=percentIncrease&headers=1&range=A:D&tq='
     var percentPopulationQuery = 'https://docs.google.com/spreadsheets/d/1qLGBnsYMfajvRJQm0TADdnidm1wrJmNw2lCyQyGsK8M/gviz/tq?sheet=populationInfected&headers=1&range=A:B&tq='
     var allStatesQuery = 'https://docs.google.com/spreadsheets/d/1qLGBnsYMfajvRJQm0TADdnidm1wrJmNw2lCyQyGsK8M/gviz/tq?sheet=allStates&headers=1&range=A:C&tq='
+    var mortalityRateQuery = 'https://docs.google.com/spreadsheets/d/1qLGBnsYMfajvRJQm0TADdnidm1wrJmNw2lCyQyGsK8M/gviz/tq?sheet=mortalityRate&headers=1&range=A:B&tq='
     var latestData = "3/25/2020";
 
     function drawGID_confirmedCases(googleSheetsQuery) {
@@ -121,18 +122,45 @@
           ' (total value of this cell and its children): ' + size + '<br></div>';
       }
     }
+    function drawGID_mortalityRate(googleSheetsQuery) {
+      var query = new google.visualization.Query(googleSheetsQuery);
+      query.send(handleQueryResponse_mortalityRate);
+    }
+
+    function handleQueryResponse_mortalityRate(response) {
+      if (response.isError()) {
+        alert('Error in query: ' + response.getMessage() + ' ' + response.getDetailedMessage());
+        return;
+      }
+
+      var data = response.getDataTable();
+      var options = {
+          title: 'State Mortality Rates from COVID-19 as of ' + latestData,
+          width: 1200,
+          height: 600,
+          hAxis: { format: 'percent' },
+         legend: { position: 'none' }
+  
+        };
+
+        var chart = new google.visualization.Histogram(document.getElementById('mortality_rate'));
+        chart.draw(data, options);
+    }
+
 
     google.charts.setOnLoadCallback(function () { drawGID_confirmedCases(confirmedCountQuery) });
     google.charts.setOnLoadCallback(function () { drawGID_percentIncrease(dailyIncreaseQuery) });
     google.charts.setOnLoadCallback(function () { drawGID_populationPercent(percentPopulationQuery) });
     google.charts.setOnLoadCallback(function () { drawGID_allStates(allStatesQuery) });
+    google.charts.setOnLoadCallback(function () { drawGID_mortalityRate(mortalityRateQuery) });
+
   </script>
 </head>
 
 <body>
   <h2>COVID-19 in the United States</h2>
   <p>
-    <strong>Description:</strong> Simple project to analyze COVID data in the US and learn a new tool.
+    <strong>Description:</strong> Simple project to analyze COVID-19 data in the US and learn a new tool.
     <br><strong>Data Source:</strong> <a href="https://github.com/CSSEGISandData" target="_blank">Johns Hopkins CSSE</a>
     <br><strong>Tools:</strong> Coded using <a href="https://developers.google.com/chart" target="_blank">Google
       Charts</a>, data stored in Google Sheets
@@ -141,6 +169,7 @@
   <div id="confirmed_cases"></div>
   <div id="percent_increase"></div>
   <div id="population_percent"></div>
+  <div id="mortality_rate"></div>
   <div style="padding-left: 100px" id="states_tree"></div>
 </body>
 
