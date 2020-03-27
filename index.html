@@ -12,45 +12,39 @@
     var mortalityRateQuery = 'https://docs.google.com/spreadsheets/d/1qLGBnsYMfajvRJQm0TADdnidm1wrJmNw2lCyQyGsK8M/gviz/tq?sheet=master&headers=1&range=E1:F54&tq='
     var latestData = "3/26/2020";
 
-    function drawGID_confirmedCases(googleSheetsQuery) {
-      var query = new google.visualization.Query(googleSheetsQuery);
-      query.send(handleQueryResponse_dailyConfirmedCount);
+
+    function drawDailyCountGraph() {
+      var wrapper = new google.visualization.ChartWrapper({
+        chartType: 'LineChart',
+        dataSourceUrl: confirmedCountQuery,
+        //query: 'SELECT A,D WHERE D > 100 ORDER BY D',
+        options: { 'title': 'Confirmed COVID-19 Cases - Select States', 'width': 1400, 'height': 600, hAxis: { format: 'MMM d, y' }, vAxis: { format: 'decimal' } },
+        containerId: 'confirmed_cases'
+      });
+      wrapper.draw()
     }
 
-    function handleQueryResponse_dailyConfirmedCount(response) {
-      if (response.isError()) {
-        alert('Error in query: ' + response.getMessage() + ' ' + response.getDetailedMessage());
-        return;
-      }
-
-      var data = response.getDataTable();
-      var options = {
-        'title': 'Confirmed COVID-19 Cases - Select States',
-        'width': 1400,
-        'height': 600
-      };
-      var chart = new google.visualization.LineChart(document.getElementById('confirmed_cases'));
-      chart.draw(data, options);
-    }
-    function drawGID_percentIncrease(googleSheetsQuery) {
-      var query = new google.visualization.Query(googleSheetsQuery);
-      query.send(handleQueryResponse_percentIncrease);
+    function drawPercentIncreaseGraph() {
+      var wrapper = new google.visualization.ChartWrapper({
+        chartType: 'AreaChart',
+        dataSourceUrl: dailyIncreaseQuery,
+        options: { 'title': 'Daily % Change in COVID-19 Cases', 'width': 1400, 'height': 600, hAxis: { format: 'MMM d, y' }, vAxis: { format: 'decimal' } },
+        containerId: 'percent_increase'
+      });
+      wrapper.draw()
     }
 
-    function handleQueryResponse_percentIncrease(response) {
-      if (response.isError()) {
-        alert('Error in query: ' + response.getMessage() + ' ' + response.getDetailedMessage());
-        return;
-      }
-
-      var data = response.getDataTable();
-      var options = {
-        'title': 'Daily % Change in COVID-19 Cases',
-        'width': 1400,
-        'height': 600
-      };
-      var chart = new google.visualization.AreaChart(document.getElementById('percent_increase'));
-      chart.draw(data, options);
+    function drawMortalityRateGraph() {
+      var wrapper = new google.visualization.ChartWrapper({
+        chartType: 'Histogram',
+        dataSourceUrl: mortalityRateQuery,
+        options: {
+          'title': 'State Mortality Rates from COVID-19 as of ' + latestData, 'width': 1400, 'height': 600, hAxis: { format: 'percent' }, vAxis: { format: 'decimal' },
+          legend: { position: 'none' }
+        },
+        containerId: 'mortality_rate'
+      });
+      wrapper.draw()
     }
 
     function drawGID_populationPercent(googleSheetsQuery) {
@@ -84,6 +78,7 @@
       var chart = new google.visualization.ColumnChart(document.getElementById("population_percent"));
       chart.draw(view, options);
     }
+
 
     function drawGID_allStates(googleSheetsQuery) {
       var query = new google.visualization.Query(googleSheetsQuery);
@@ -122,37 +117,12 @@
           ' (total value of this cell and its children): ' + size + '<br></div>';
       }
     }
-    function drawGID_mortalityRate(googleSheetsQuery) {
-      var query = new google.visualization.Query(googleSheetsQuery);
-      query.send(handleQueryResponse_mortalityRate);
-    }
 
-    function handleQueryResponse_mortalityRate(response) {
-      if (response.isError()) {
-        alert('Error in query: ' + response.getMessage() + ' ' + response.getDetailedMessage());
-        return;
-      }
-
-      var data = response.getDataTable();
-      var options = {
-          title: 'State Mortality Rates from COVID-19 as of ' + latestData,
-          width: 1200,
-          height: 600,
-          hAxis: { format: 'percent' },
-         legend: { position: 'none' }
-  
-        };
-
-        var chart = new google.visualization.Histogram(document.getElementById('mortality_rate'));
-        chart.draw(data, options);
-    }
-
-
-    google.charts.setOnLoadCallback(function () { drawGID_confirmedCases(confirmedCountQuery) });
-    google.charts.setOnLoadCallback(function () { drawGID_percentIncrease(dailyIncreaseQuery) });
+    google.charts.setOnLoadCallback(drawDailyCountGraph);
+    google.charts.setOnLoadCallback(drawPercentIncreaseGraph);
+    google.charts.setOnLoadCallback(drawMortalityRateGraph);
     google.charts.setOnLoadCallback(function () { drawGID_populationPercent(percentPopulationQuery) });
     google.charts.setOnLoadCallback(function () { drawGID_allStates(allStatesQuery) });
-    google.charts.setOnLoadCallback(function () { drawGID_mortalityRate(mortalityRateQuery) });
 
   </script>
 </head>
@@ -167,7 +137,11 @@
     <br><strong>Last Updated:</strong> 3/27/2020
   </p>
   <div id="confirmed_cases"></div>
-  <div id="percent_increase"></div>
+  <div>
+    <div id="percent_increase"></div>
+    <p style="text-align: center; font-family: Cambria;">Note: The Washington State data anomalies appear to be due to deaths
+      causing a reduction in confirmed COVID-19 cases.</p>
+  </div>
   <div id="population_percent"></div>
   <div id="mortality_rate"></div>
   <div style="padding-left: 100px" id="states_tree"></div>
