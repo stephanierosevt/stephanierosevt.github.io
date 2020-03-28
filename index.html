@@ -10,7 +10,8 @@
     var percentPopulationQuery = 'https://docs.google.com/spreadsheets/d/1qLGBnsYMfajvRJQm0TADdnidm1wrJmNw2lCyQyGsK8M/gviz/tq?sheet=populationInfected&headers=1&range=A:B&tq='
     var allStatesQuery = 'https://docs.google.com/spreadsheets/d/1qLGBnsYMfajvRJQm0TADdnidm1wrJmNw2lCyQyGsK8M/gviz/tq?sheet=master&headers=1&range=A:C&tq='
     var mortalityRateQuery = 'https://docs.google.com/spreadsheets/d/1qLGBnsYMfajvRJQm0TADdnidm1wrJmNw2lCyQyGsK8M/gviz/tq?sheet=master&headers=1&range=E1:F54&tq='
-    var latestData = "3/26/2020";
+    var growthRateQuery = 'https://docs.google.com/spreadsheets/d/1qLGBnsYMfajvRJQm0TADdnidm1wrJmNw2lCyQyGsK8M/gviz/tq?sheet=growthRates&headers=1&range=A2:B61&tq='
+    var latestData = "3/27/2020";
 
 
     function drawDailyCountGraph() {
@@ -43,6 +44,24 @@
           legend: { position: 'none' }
         },
         containerId: 'mortality_rate'
+      });
+      wrapper.draw()
+    }
+
+    function drawDailyGrowthRateGraph() {
+      var wrapper = new google.visualization.ChartWrapper({
+        chartType: 'Histogram',
+        dataSourceUrl: growthRateQuery,
+        options: {
+          'title': "Daily Growth Rates of COVID-19 cases on " + latestData, 
+          'width': 1400, 
+          'height': 600, 
+          colors: ['green'],
+          hAxis: { format: 'percent' }, 
+          vAxis: { format: 'decimal' },
+          legend: { position: 'none' }
+        },
+        containerId: 'daily_growth_rate'
       });
       wrapper.draw()
     }
@@ -121,6 +140,7 @@
     google.charts.setOnLoadCallback(drawDailyCountGraph);
     google.charts.setOnLoadCallback(drawPercentIncreaseGraph);
     google.charts.setOnLoadCallback(drawMortalityRateGraph);
+    google.charts.setOnLoadCallback(drawDailyGrowthRateGraph);
     google.charts.setOnLoadCallback(function () { drawGID_populationPercent(percentPopulationQuery) });
     google.charts.setOnLoadCallback(function () { drawGID_allStates(allStatesQuery) });
 
@@ -134,7 +154,7 @@
     <br><strong>Data Source:</strong> <a href="https://github.com/CSSEGISandData" target="_blank">Johns Hopkins CSSE</a>
     <br><strong>Tools:</strong> Coded using <a href="https://developers.google.com/chart" target="_blank">Google
       Charts</a>, data stored in Google Sheets
-    <br><strong>Last Updated:</strong> 3/27/2020
+    <br><strong>Last Updated:</strong> 3/28/2020
   </p>
   <div id="confirmed_cases"></div>
   <div>
@@ -143,6 +163,7 @@
       causing a reduction in confirmed COVID-19 cases.</p>
   </div>
   <div id="population_percent"></div>
+  <div id="daily_growth_rate"></div>
   <div id="mortality_rate"></div>
   <div style="padding-left: 100px" id="states_tree"></div>
 </body>
