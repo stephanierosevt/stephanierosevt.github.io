@@ -11,6 +11,7 @@
     var allStatesQuery = 'https://docs.google.com/spreadsheets/d/1qLGBnsYMfajvRJQm0TADdnidm1wrJmNw2lCyQyGsK8M/gviz/tq?sheet=master&headers=1&range=A:C&tq='
     var mortalityRateQuery = 'https://docs.google.com/spreadsheets/d/1qLGBnsYMfajvRJQm0TADdnidm1wrJmNw2lCyQyGsK8M/gviz/tq?sheet=master&headers=1&range=E1:F54&tq='
     var growthRateQuery = 'https://docs.google.com/spreadsheets/d/1qLGBnsYMfajvRJQm0TADdnidm1wrJmNw2lCyQyGsK8M/gviz/tq?sheet=growthRates&headers=1&range=A2:B61&tq='
+    var growthRateQueryUS = 'https://docs.google.com/spreadsheets/d/1qLGBnsYMfajvRJQm0TADdnidm1wrJmNw2lCyQyGsK8M/gviz/tq?sheet=growthRates&headers=1&range=A64:B68&tq='
     var latestData = "3/29/2020";
 
 
@@ -25,11 +26,21 @@
       wrapper.draw()
     }
 
+    function drawGrowthGraph() {
+      var wrapper = new google.visualization.ChartWrapper({
+        chartType: 'LineChart',
+        dataSourceUrl: growthRateQueryUS,
+        options: { 'title': 'U.S. Growth Rate in COVID-19 Cases - All States', 'width': 1400, 'height': 600, hAxis: { format: 'MMM d, y' }, vAxis: { format: 'percent' } },
+        containerId: 'growth_cases_us'
+      });
+      wrapper.draw()
+    }
+
     function drawPercentIncreaseGraph() {
       var wrapper = new google.visualization.ChartWrapper({
         chartType: 'AreaChart',
         dataSourceUrl: dailyIncreaseQuery,
-        options: { 'title': 'Daily % Change in COVID-19 Cases', 'width': 1400, 'height': 600, hAxis: { format: 'MMM d, y' }, vAxis: { format: 'decimal' } },
+        options: { 'title': 'Daily % Change in COVID-19 Cases - Select States', 'width': 1400, 'height': 600, hAxis: { format: 'MMM d, y' }, vAxis: { format: 'decimal' } },
         containerId: 'percent_increase'
       });
       wrapper.draw()
@@ -53,7 +64,7 @@
         chartType: 'Histogram',
         dataSourceUrl: growthRateQuery,
         options: {
-          'title': "Daily Growth Rates of COVID-19 cases on " + latestData, 
+          'title': "Daily Growth Rates of COVID-19 Cases on " + latestData, 
           'width': 1400, 
           'height': 600, 
           colors: ['green'],
@@ -138,6 +149,7 @@
     }
 
     google.charts.setOnLoadCallback(drawDailyCountGraph);
+    google.charts.setOnLoadCallback(drawGrowthGraph);
     google.charts.setOnLoadCallback(drawPercentIncreaseGraph);
     google.charts.setOnLoadCallback(drawMortalityRateGraph);
     google.charts.setOnLoadCallback(drawDailyGrowthRateGraph);
@@ -157,6 +169,7 @@
     <br><strong>Last Updated:</strong> 3/30/2020
   </p>
   <div id="confirmed_cases"></div>
+  <div id="growth_cases_us"></div>
   <div>
     <div id="percent_increase"></div>
     <p style="text-align: center; font-family: Cambria;">Note: The Washington State data anomalies appear to be due to deaths
