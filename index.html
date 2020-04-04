@@ -10,9 +10,10 @@
     var percentPopulationQuery = 'https://docs.google.com/spreadsheets/d/1qLGBnsYMfajvRJQm0TADdnidm1wrJmNw2lCyQyGsK8M/gviz/tq?sheet=populationInfected&headers=1&range=A:B&tq='
     var allStatesQuery = 'https://docs.google.com/spreadsheets/d/1qLGBnsYMfajvRJQm0TADdnidm1wrJmNw2lCyQyGsK8M/gviz/tq?sheet=master&headers=1&range=A:C&tq='
     var mortalityRateQuery = 'https://docs.google.com/spreadsheets/d/1qLGBnsYMfajvRJQm0TADdnidm1wrJmNw2lCyQyGsK8M/gviz/tq?sheet=master&headers=1&range=E1:F54&tq='
+    var mortalityDualQuery = 'https://docs.google.com/spreadsheets/d/1qLGBnsYMfajvRJQm0TADdnidm1wrJmNw2lCyQyGsK8M/gviz/tq?sheet=deaths&headers=1&range=O:Q&tq='
     var growthRateQuery = 'https://docs.google.com/spreadsheets/d/1qLGBnsYMfajvRJQm0TADdnidm1wrJmNw2lCyQyGsK8M/gviz/tq?sheet=growthRates&headers=1&range=A2:B61&tq='
     var growthRateQueryUS = 'https://docs.google.com/spreadsheets/d/1qLGBnsYMfajvRJQm0TADdnidm1wrJmNw2lCyQyGsK8M/gviz/tq?sheet=growthRates&headers=1&range=Q:R&tq='
-    var latestData = "4/02/2020";
+    var latestData = "4/03/2020";
 
 
     function drawDailyCountGraph() {
@@ -57,6 +58,38 @@
         containerId: 'mortality_rate'
       });
       wrapper.draw()
+    }
+
+    function drawGID_deathsDual(googleSheetsQuery) {
+      var query = new google.visualization.Query(googleSheetsQuery);
+      query.send(handleQueryResponse_deathsDual);
+    }
+
+    function handleQueryResponse_deathsDual(response) {
+      if (response.isError()) {
+        alert('Error in query: ' + response.getMessage() + ' ' + response.getDetailedMessage());
+        return;
+      }
+
+      var data = response.getDataTable();     
+      var materialOptions = {
+        chart: {title: "Deaths and Daily Change in U.S. Death Rate due to COVID-19"
+        },
+        width: 1400,
+        height: 500,
+        series: {
+          0: {axis: 'Count'},
+          1: {axis: 'Rate'}
+        },
+        axes: {
+          y: {
+            Count: {label: 'Deaths (count)'},
+            Rate: {label: 'Deaths (% change)'},
+          }
+        }
+      };
+      var chart = new google.charts.Line(document.getElementById('death_rate_dual'));
+      chart.draw(data, google.charts.Line.convertOptions(materialOptions));
     }
 
     function drawDailyGrowthRateGraph() {
@@ -155,6 +188,8 @@
     google.charts.setOnLoadCallback(drawDailyGrowthRateGraph);
     google.charts.setOnLoadCallback(function () { drawGID_populationPercent(percentPopulationQuery) });
     google.charts.setOnLoadCallback(function () { drawGID_allStates(allStatesQuery) });
+    google.charts.setOnLoadCallback(function () { drawGID_deathsDual(mortalityDualQuery) });
+
 
   </script>
 </head>
@@ -166,7 +201,7 @@
     <br><strong>Data Source:</strong> <a href="https://github.com/CSSEGISandData" target="_blank">Johns Hopkins CSSE</a>
     <br><strong>Tools:</strong> Coded using <a href="https://developers.google.com/chart" target="_blank">Google
       Charts</a>, data stored in Google Sheets
-    <br><strong>Last Updated:</strong> 4/03/2020
+    <br><strong>Last Updated:</strong> 4/04/2020
   </p>
   <div id="confirmed_cases"></div>
   <div id="growth_cases_us"></div>
@@ -178,6 +213,7 @@
   <div id="population_percent"></div>
   <div id="daily_growth_rate"></div>
   <div id="mortality_rate"></div>
+  <div style="padding-left: 100px" id="death_rate_dual"></div>
   <div style="padding-left: 100px" id="states_tree"></div>
 </body>
 
