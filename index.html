@@ -13,8 +13,6 @@
     var mortalityDualQuery = 'https://docs.google.com/spreadsheets/d/1qLGBnsYMfajvRJQm0TADdnidm1wrJmNw2lCyQyGsK8M/gviz/tq?sheet=deaths&headers=1&range=P:R&tq='
     var growthRateQuery = 'https://docs.google.com/spreadsheets/d/1qLGBnsYMfajvRJQm0TADdnidm1wrJmNw2lCyQyGsK8M/gviz/tq?sheet=growthRates&headers=1&range=A2:B61&tq='
     var growthRateQueryUS = 'https://docs.google.com/spreadsheets/d/1qLGBnsYMfajvRJQm0TADdnidm1wrJmNw2lCyQyGsK8M/gviz/tq?sheet=growthRates&headers=1&range=Q:R&tq='
-    var latestData = "4/05/2020";
-
 
     function drawDailyCountGraph() {
       var wrapper = new google.visualization.ChartWrapper({
@@ -52,7 +50,7 @@
         chartType: 'Histogram',
         dataSourceUrl: mortalityRateQuery,
         options: {
-          'title': 'State Mortality Rates from COVID-19 as of ' + latestData, 'width': 1400, 'height': 600, hAxis: { format: 'percent' }, vAxis: { format: 'decimal' },
+          'title': 'Current State Mortality Rates from COVID-19', 'width': 1400, 'height': 600, hAxis: { format: 'percent' }, vAxis: { format: 'decimal' },
           legend: { position: 'none' }
         },
         containerId: 'mortality_rate'
@@ -73,7 +71,7 @@
 
       var data = response.getDataTable();     
       var materialOptions = {
-        chart: {title: "Deaths and Daily Change in U.S. Death Rate due to COVID-19"
+        chart: {title: "Deaths and Daily Percent Change in U.S. Death Rate due to COVID-19"
         },
         width: 1400,
         height: 500,
@@ -97,7 +95,7 @@
         chartType: 'Histogram',
         dataSourceUrl: growthRateQuery,
         options: {
-          'title': "Daily Growth Rates of COVID-19 Cases on " + latestData, 
+          'title': "Current One Day Growth Rate of COVID-19 Cases", 
           'width': 1400, 
           'height': 600, 
           colors: ['green'],
@@ -132,7 +130,7 @@
         }]);
 
       var options = {
-        title: "% of State Population with Confirmed COVID-19 as of " + latestData,
+        title: "Current Percent of State Population with Confirmed COVID-19",
         width: 1400,
         height: 600,
         bar: { groupWidth: "95%" },
@@ -156,7 +154,7 @@
 
       var data = response.getDataTable();
       var options = {
-        title: "Total Cases per State as of " + latestData,
+        title: "Current Confirmed COVID-19 Cases per State",
         width: 1200,
         height: 600,
         minColor: '#0d0',
@@ -202,6 +200,7 @@
     <br><strong>Tools:</strong> Coded using <a href="https://developers.google.com/chart" target="_blank">Google
       Charts</a>, data stored in Google Sheets
     <br><strong>Last Updated:</strong> 4/06/2020
+    <br><strong>Latest Data:</strong> 4/06/2020
   </p>
   <div id="confirmed_cases"></div>
   <div id="growth_cases_us"></div>
