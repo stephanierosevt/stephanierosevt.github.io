@@ -5,14 +5,15 @@
   <script type="text/javascript">
     google.charts.load('current', { 'packages': ['corechart', 'treemap', 'line'] });
 
-    var confirmedCountQuery = 'https://docs.google.com/spreadsheets/d/1qLGBnsYMfajvRJQm0TADdnidm1wrJmNw2lCyQyGsK8M/gviz/tq?sheet=dailyCounts&headers=1&range=J:R&tq='
-    var dailyIncreaseQuery = 'https://docs.google.com/spreadsheets/d/1qLGBnsYMfajvRJQm0TADdnidm1wrJmNw2lCyQyGsK8M/gviz/tq?sheet=dailyCounts&headers=1&range=D:I&tq='
-    var percentPopulationQuery = 'https://docs.google.com/spreadsheets/d/1qLGBnsYMfajvRJQm0TADdnidm1wrJmNw2lCyQyGsK8M/gviz/tq?sheet=populationInfected&headers=1&range=A:B&tq='
-    var allStatesQuery = 'https://docs.google.com/spreadsheets/d/1qLGBnsYMfajvRJQm0TADdnidm1wrJmNw2lCyQyGsK8M/gviz/tq?sheet=master&headers=1&range=A:C&tq='
-    var mortalityRateQuery = 'https://docs.google.com/spreadsheets/d/1qLGBnsYMfajvRJQm0TADdnidm1wrJmNw2lCyQyGsK8M/gviz/tq?sheet=master&headers=1&range=E1:F54&tq='
-    var mortalityDualQuery = 'https://docs.google.com/spreadsheets/d/1qLGBnsYMfajvRJQm0TADdnidm1wrJmNw2lCyQyGsK8M/gviz/tq?sheet=deaths&headers=1&range=T:V&tq='
-    var growthRateQuery = 'https://docs.google.com/spreadsheets/d/1qLGBnsYMfajvRJQm0TADdnidm1wrJmNw2lCyQyGsK8M/gviz/tq?sheet=growthRates&headers=1&range=A2:B61&tq='
-    var growthRateQueryUS = 'https://docs.google.com/spreadsheets/d/1qLGBnsYMfajvRJQm0TADdnidm1wrJmNw2lCyQyGsK8M/gviz/tq?sheet=growthRates&headers=1&range=V:W&tq='
+    var googleSheet = 'https://docs.google.com/spreadsheets/d/1qLGBnsYMfajvRJQm0TADdnidm1wrJmNw2lCyQyGsK8M/gviz/tq?';
+    var confirmedCountQuery = googleSheet + 'sheet=dailyCounts&headers=1&range=J:R&tq=';
+    var dailyIncreaseQuery = googleSheet + 'sheet=dailyCounts&headers=1&range=D:I&tq=';
+    var percentPopulationQuery = googleSheet + 'sheet=populationInfected&headers=1&range=A:B&tq=';
+    var allStatesQuery = googleSheet + 'sheet=master&headers=1&range=A:C&tq=';
+    var mortalityRateQuery = googleSheet +'sheet=master&headers=1&range=E1:F54&tq=';
+    var mortalityDualQuery = googleSheet + 'sheet=deaths&headers=1&range=W:Y&tq=';
+    var growthRateQuery = googleSheet + 'sheet=growthRates&headers=1&range=A2:B61&tq=';
+    var growthRateQueryUS = googleSheet + 'sheet=growthRates&headers=1&range=V:W&tq=';
 
     function drawDailyCountGraph() {
       var wrapper = new google.visualization.ChartWrapper({
@@ -199,8 +200,8 @@
     <br><strong>Data Source:</strong> <a href="https://github.com/CSSEGISandData" target="_blank">Johns Hopkins CSSE</a>
     <br><strong>Tools:</strong> Coded using <a href="https://developers.google.com/chart" target="_blank">Google
       Charts</a>, data stored in Google Sheets
-    <br><strong>Last Updated:</strong> 4/11/2020
-    <br><strong>Latest Data:</strong> 4/11/2020
+    <br><strong>Last Updated:</strong> 4/12/2020
+    <br><strong>Latest Data:</strong> 4/12/2020
   </p>
   <div id="confirmed_cases"></div>
   <div id="growth_cases_us"></div>
