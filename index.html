@@ -13,7 +13,7 @@
     var mortalityRateQuery = googleSheet +'sheet=master&headers=1&range=E1:F54&tq=';
     var mortalityDualQuery = googleSheet + 'sheet=deaths&headers=1&range=W:Y&tq=';
     var growthRateQuery = googleSheet + 'sheet=growthRates&headers=1&range=A2:B61&tq=';
-    var growthRateQueryUS = googleSheet + 'sheet=growthRates&headers=1&range=V:W&tq=';
+    var growthRateQueryUS = googleSheet + 'sheet=growthRates&headers=1&range=Y:Z&tq=';
 
     function drawDailyCountGraph() {
       var wrapper = new google.visualization.ChartWrapper({
@@ -200,8 +200,8 @@
     <br><strong>Data Source:</strong> <a href="https://github.com/CSSEGISandData" target="_blank">Johns Hopkins CSSE</a>
     <br><strong>Tools:</strong> Coded using <a href="https://developers.google.com/chart" target="_blank">Google
       Charts</a>, data stored in Google Sheets
-    <br><strong>Last Updated:</strong> 4/12/2020
-    <br><strong>Latest Data:</strong> 4/12/2020
+    <br><strong>Last Updated:</strong> 4/13/2020
+    <br><strong>Latest Data:</strong> 4/13/2020
   </p>
   <div id="confirmed_cases"></div>
   <div id="growth_cases_us"></div>
